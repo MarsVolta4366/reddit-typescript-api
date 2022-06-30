@@ -8,15 +8,15 @@ users.post("/", async (req, res) => {
         const usernameTaken = await User.findOne({ username: req.body.username })
 
         if (usernameTaken === null) {
-            await User.create({ ...req.body, passwordDigest: await bcrypt.hash(req.body.passwordDigest, 12) })
+            await User.create({ ...req.body, passwordDigest: await bcrypt.hash(req.body.password, 12) })
             res.status(200).json({ message: "User created" })
         } else {
-            res.json({
+            res.status(500).json({
                 message: "Username is already taken"
             })
         }
-    } catch (err) {
-        res.status(500).json(err)
+    } catch (_err) {
+        res.status(500).json({ message: "There was a problem creating the user" })
     }
 })
 

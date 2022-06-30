@@ -17,6 +17,7 @@ connection.once("open", () => {
 
 // Controllers
 app.use("/users", require("./controllers/users_controller"))
+app.use("/auth", require("./controllers/auth_controller"))
 
 app.get("/", (_req, res) => {
     res.status(200).send("Welcome to my reddit clone API")
