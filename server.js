@@ -1,6 +1,8 @@
 require("dotenv").config()
 const express = require("express")
 const mongoose = require("mongoose")
+let session = require("express-session")
+const MongoStore = require("connect-mongo")
 
 const app = express()
 const port = process.env.PORT || 4000
@@ -14,6 +16,16 @@ const connection = mongoose.connection
 connection.once("open", () => {
     console.log("Connected to MongoDB")
 })
+
+// Express session
+// app.set("trust proxy", 1)
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 },
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
+}))
 
 // Controllers
 app.use("/users", require("./controllers/users_controller"))
