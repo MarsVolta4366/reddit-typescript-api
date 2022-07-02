@@ -14,7 +14,6 @@ app.use(cors({
     origin: true,
     credentials: true
 }))
-app.use(defineCurrentUser)
 
 // DB connection
 const uri = process.env.MONGO_URI
@@ -32,9 +31,9 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: true,
-        secure: false,
-        sameSite: true
+        // httpOnly: true,
+        // secure: false,
+        // sameSite: true
     },
     store: new MongoStore({
         mongoUrl: process.env.MONGO_URI,
@@ -44,6 +43,7 @@ app.use(session({
 }))
 
 // Controllers
+app.use(defineCurrentUser)
 app.use("/users", require("./controllers/users_controller"))
 app.use("/auth", require("./controllers/auth_controller"))
 

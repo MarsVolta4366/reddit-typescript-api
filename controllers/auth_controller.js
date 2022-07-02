@@ -25,8 +25,17 @@ router.get("/profile", (req, res) => {
 
 // Log out
 router.get("/logout", (req, res) => {
-    req.session = null
-    res.json({ message: "Logged out" })
+    try {
+        if (req.session.user_id) {
+            req.session.destroy()
+            res.clearCookie("connect.sid", { path: "/" })
+            res.status(200).json({ message: "Logged out" })
+        } else {
+            res.status(500).json({ message: "User isn't logged in" })
+        }
+    } catch {
+        res.status(500).json({ message: "There was an issue logging out the user" })
+    }
 })
 
 module.exports = router
