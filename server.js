@@ -1,4 +1,5 @@
 require("dotenv").config()
+const cors = require("cors")
 const express = require("express")
 const mongoose = require("mongoose")
 let session = require("express-session")
@@ -8,6 +9,10 @@ const app = express()
 const port = process.env.PORT || 4000
 
 app.use(express.json())
+app.use(cors({
+    origin: true,
+    credentials: true
+}))
 
 // DB connection
 const uri = process.env.MONGO_URI
@@ -18,13 +23,22 @@ connection.once("open", () => {
 })
 
 // Express session
-// app.set("trust proxy", 1)
+app.set("trust proxy", 1)
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 },
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: false,
+        sameSite: true
+    },
+    store: new MongoStore({
+        mongoUrl: process.env.MONGO_URI,
+        autoRemove: "interval",
+        autoRemoveInterval: 10
+    })
 }))
 
 // Controllers
