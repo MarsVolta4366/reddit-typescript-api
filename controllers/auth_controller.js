@@ -18,4 +18,15 @@ router.post("/", async (req, res) => {
     }
 })
 
+// Send back username if session exists
+router.get("/profile", (req, res) => {
+    req.currentUser ? res.json({ username: req.currentUser.username }) : res.json(null)
+})
+
+// Log out
+router.get("/logout", (req, res) => {
+    req.session = null
+    res.json({ message: "Logged out" })
+})
+
 module.exports = router

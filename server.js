@@ -4,6 +4,7 @@ const express = require("express")
 const mongoose = require("mongoose")
 let session = require("express-session")
 const MongoStore = require("connect-mongo")
+const defineCurrentUser = require("./middleware/defineCurrentUser")
 
 const app = express()
 const port = process.env.PORT || 4000
@@ -13,6 +14,7 @@ app.use(cors({
     origin: true,
     credentials: true
 }))
+app.use(defineCurrentUser)
 
 // DB connection
 const uri = process.env.MONGO_URI
