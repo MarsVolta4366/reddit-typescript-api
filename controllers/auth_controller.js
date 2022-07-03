@@ -9,7 +9,7 @@ router.post("/", async (req, res) => {
 
         if (foundUser && await bcrypt.compare(req.body.password, foundUser.passwordDigest)) {
             req.session.user_id = foundUser.id
-            res.status(200).json({ username: foundUser.username, authenticated: true })
+            res.status(200).json({ username: foundUser.username })
         } else {
             res.status(403).json({ message: "Username or password is incorrect" })
         }
