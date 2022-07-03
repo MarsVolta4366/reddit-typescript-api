@@ -8,8 +8,9 @@ users.post("/", async (req, res) => {
         const usernameTaken = await User.findOne({ username: req.body.username })
 
         if (usernameTaken === null) {
-            await User.create({ ...req.body, passwordDigest: await bcrypt.hash(req.body.password, 12) })
-            res.status(200).json({ message: "User created" })
+            const newUser = await User.create({ ...req.body, passwordDigest: await bcrypt.hash(req.body.password, 12) })
+            req.session.user_id = newUser.id
+            res.status(200).json({ username: newUser.username })
         } else {
             res.status(500).json({
                 message: "Username is already taken"
