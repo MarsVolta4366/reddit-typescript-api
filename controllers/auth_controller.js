@@ -11,7 +11,7 @@ router.post("/", async (req, res) => {
             req.session.user_id = foundUser.id
             res.status(200).json({ username: foundUser.username })
         } else {
-            res.status(403).json({ message: "Username or password is incorrect" })
+            res.status(403).json({ message: "Incorrect username or password" })
         }
     } catch (_err) {
         res.status(500).json({ message: "There was a problem logging in" })
