@@ -10,7 +10,7 @@ users.post("/", async (req, res) => {
         if (usernameTaken === null) {
             const newUser = await User.create({ ...req.body, passwordDigest: await bcrypt.hash(req.body.password, 12) })
             req.session.user_id = newUser.id
-            res.status(200).json({ username: newUser.username })
+            res.status(200).json({ username: newUser.username, user_id: newUser.id })
         } else {
             res.status(500).json({
                 message: "Username is already taken"

@@ -2,6 +2,7 @@ const Post = require("../models/post.model")
 const posts = require("express").Router()
 
 // Create post
+// Post won't be created unless {user: ""} field is provided with a valid existing user id
 posts.post("/", async (req, res) => {
     try {
         await Post.create(req.body)
