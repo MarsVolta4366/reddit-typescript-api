@@ -9,7 +9,7 @@ router.post("/", async (req, res) => {
 
         if (foundUser && await bcrypt.compare(req.body.password, foundUser.passwordDigest)) {
             req.session.user_id = foundUser.id
-            res.status(200).json({ username: foundUser.username, user_id: foundUser.id })
+            res.status(200).json({ username: foundUser.username })
         } else {
             res.status(403).json({ message: "Incorrect username or password" })
         }
@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
 
 // Send back username if session exists
 router.get("/profile", (req, res) => {
-    req.currentUser ? res.json({ username: req.currentUser.username, user_id: req.currentUser.id }) : res.json(null)
+    req.currentUser ? res.json({ username: req.currentUser.username }) : res.json(null)
 })
 
 // Log out
