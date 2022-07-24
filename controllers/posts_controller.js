@@ -58,7 +58,7 @@ posts.put("/:postId", async (req, res) => {
 posts.get("/user/:username/:offset", async (req, res) => {
     try {
         const user = await User.findOne({ username: req.params.username })
-        const usersPosts = await Post.find({ user: user._id }).skip(req.params.offset).limit(10)
+        const usersPosts = await Post.find({ user: user._id }).populate("user", "username -_id").skip(req.params.offset).limit(10)
         const totalPosts = await Post.count({ user: user._id })
         res.status(200).json({ data: [...usersPosts], totalPosts })
     } catch {
