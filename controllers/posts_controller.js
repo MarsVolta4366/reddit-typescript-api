@@ -67,11 +67,15 @@ posts.get("/user/:username/:offset", async (req, res) => {
 })
 
 // Get posts for home page
-posts.get("/:offset", async (req, res) => {
+posts.get("/", async (req, res) => {
     try {
-        const foundPosts = await Post.find({}).populate("user", "username -_id").skip(req.params.offset).limit(10)
+        let offset = 0
+        if (req.query.page > 1) {
+            offset = ((req.query.page - 1) * 10)
+        }
+        const foundPosts = await Post.find({}).populate("user", "username -_id").skip(offset).limit(10)
         const totalPosts = await Post.count()
-        res.status(200).json({ data: [...foundPosts], totalPosts })
+        res.status(200).json({ posts: [...foundPosts], totalPosts })
     } catch {
         res.status(500).json({ message: "There was a problem getting posts" })
     }
